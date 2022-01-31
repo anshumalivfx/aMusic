@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class PlaySong extends AppCompatActivity {
     @Override
@@ -52,11 +53,12 @@ public class PlaySong extends AppCompatActivity {
         songs = (ArrayList) bundle.getParcelableArrayList("songList");
         textContent = intent.getStringExtra("currentSong");
         textView.setText(textContent);
+        textView.setSelected(true);
         position = intent.getIntExtra("position", 0);
         Uri uri = Uri.parse(songs.get(position).toString());
         mediaPlayer = MediaPlayer.create(this, uri);
         mediaPlayer.start();
-
+        play.setImageResource(R.drawable.pause);
         seekBar.setMax(mediaPlayer.getDuration());
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -81,8 +83,8 @@ public class PlaySong extends AppCompatActivity {
             public void run() {
                 int currentPosition = 0;
                 try {
-                    while (currentPosition<mediaPlayer.getCurrentPosition()){
-                        currentPosition = mediaPlayer.getDuration();
+                    while (currentPosition<mediaPlayer.getDuration()){
+                        currentPosition = mediaPlayer.getCurrentPosition();
                         seekBar.setProgress(currentPosition);
                         sleep(800);
                     }
@@ -120,6 +122,13 @@ public class PlaySong extends AppCompatActivity {
                     position= songs.size()-1;
                 }
 
+                Uri uri = Uri.parse(songs.get(position).toString());
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+                mediaPlayer.start();
+                play.setImageResource(R.drawable.pause);
+                seekBar.setMax(mediaPlayer.getDuration());
+                textContent = songs.get(position).getName().toString();
+                textView.setText(textContent);
             }
         });
 
@@ -133,7 +142,13 @@ public class PlaySong extends AppCompatActivity {
                 }else{
                     position= 0;
                 }
-
+                Uri uri = Uri.parse(songs.get(position).toString());
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+                mediaPlayer.start();
+                play.setImageResource(R.drawable.pause);
+                seekBar.setMax(mediaPlayer.getDuration());
+                textContent = songs.get(position).getName().toString();
+                textView.setText(textContent);
             }
         });
     }
